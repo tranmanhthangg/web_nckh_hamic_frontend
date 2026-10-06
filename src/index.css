@@ -25,7 +25,8 @@
 }
 
 html {
-  font-size: 17px;
+  /* Root 16px: đưa toàn bộ scale theo `rem` (chữ, spacing, max-w) về đúng tỉ lệ website mẫu. */
+  font-size: 16px;
 }
 
 body {
@@ -34,7 +35,7 @@ body {
   background: var(--color-page);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  line-height: 1.7;
+  line-height: 1.6;
   letter-spacing: 0.005em;
   -webkit-font-smoothing: antialiased;
 }

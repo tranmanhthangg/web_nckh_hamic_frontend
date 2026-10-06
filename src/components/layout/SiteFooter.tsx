@@ -8,7 +8,6 @@ import {
   MapPin,
   Phone,
   ShieldCheck,
-  Sparkles,
 } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { domains } from '@/data/domains'
@@ -39,13 +38,13 @@ function FooterHeading({
 }
 
 const footerLinkClass =
-  'text-sm text-slate-300 transition-colors hover:text-white'
+  'text-[13px] text-slate-300 transition-colors hover:text-white'
 
 export function SiteFooter() {
   return (
-    <footer className="bg-brand-dark text-slate-300">
+    <footer className="bg-[#0B1B2E] text-slate-300">
       <Container className="py-12 lg:py-14">
-        <div className="grid gap-10 lg:grid-cols-[1.7fr_1fr_1fr_1.3fr]">
+        <div className="grid gap-10 lg:grid-cols-4">
           <div>
             <div className="flex items-start gap-4">
               <span className="rounded-lg border border-white/15 bg-white/5 p-2">
@@ -61,11 +60,11 @@ export function SiteFooter() {
               </span>
             </div>
 
-            <p className="mt-5 text-sm leading-relaxed text-slate-300">
+            <p className="mt-5 text-[13px] leading-relaxed text-slate-400">
               {siteIdentity.description}
             </p>
 
-            <p className="mt-5 flex items-start gap-2 text-sm text-slate-300">
+            <p className="mt-5 flex items-start gap-2 text-[13px] text-slate-300">
               <ShieldCheck
                 size={18}
                 className="mt-0.5 shrink-0 text-emerald-400"
@@ -73,25 +72,16 @@ export function SiteFooter() {
               />
               {siteIdentity.academicSponsor}
             </p>
-
-            <p className="mt-3 flex items-start gap-2 text-sm font-semibold text-white">
-              <Sparkles
-                size={18}
-                className="mt-0.5 shrink-0 text-brand-light"
-                aria-hidden
-              />
-              {siteIdentity.developedBy}
-            </p>
           </div>
 
           <div>
-            <FooterHeading icon={Layers}>
+            <FooterHeading icon={Layers} iconClassName="text-brand-light">
               5 Trụ cột Nghiên cứu
             </FooterHeading>
             <ul className="mt-5 space-y-2.5">
               {domains.map((domain) => (
                 <li key={domain.code} className="flex gap-2">
-                  <span aria-hidden className="text-slate-500">
+                  <span aria-hidden className="text-slate-400">
                     •
                   </span>
                   <Link to="/tru-cot" className={footerLinkClass}>
@@ -118,7 +108,7 @@ export function SiteFooter() {
                       className="mt-0.5 shrink-0 text-slate-500"
                       aria-hidden
                     />
-                    <span>
+                    <span className="text-white">
                       {lab.label}
                       <span className="text-slate-400"> ({lab.note})</span>
                     </span>
@@ -135,11 +125,11 @@ export function SiteFooter() {
             >
               Văn phòng Khoa &amp; Hỗ trợ
             </FooterHeading>
-            <ul className="mt-5 space-y-3 text-sm text-slate-300">
+            <ul className="mt-5 space-y-3 text-[13px] text-slate-300">
               <li className="flex items-start gap-2">
                 <Phone
                   size={16}
-                  className="mt-1 shrink-0 text-slate-400"
+                  className="mt-1 shrink-0 text-brand-light"
                   aria-hidden
                 />
                 <span>{siteIdentity.phones.join(' / ')}</span>
@@ -147,7 +137,7 @@ export function SiteFooter() {
               <li className="flex items-start gap-2">
                 <Mail
                   size={16}
-                  className="mt-1 shrink-0 text-slate-400"
+                  className="mt-1 shrink-0 text-brand-light"
                   aria-hidden
                 />
                 <span>{siteIdentity.emails.join(' • ')}</span>
@@ -155,7 +145,7 @@ export function SiteFooter() {
               <li className="flex items-start gap-2">
                 <MapPin
                   size={16}
-                  className="mt-1 shrink-0 text-slate-400"
+                  className="mt-1 shrink-0 text-brand-light"
                   aria-hidden
                 />
                 <span>{siteIdentity.address}</span>
@@ -164,7 +154,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-[13px] text-slate-400 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span>{footerCopyright}</span>
             <span aria-hidden className="text-slate-600">
@@ -174,9 +164,9 @@ export function SiteFooter() {
               {siteIdentity.developedBy}
             </span>
           </div>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
             {footerLegalLinks.map((label, index) => (
-              <span key={label} className="flex items-center gap-3">
+              <span key={label} className="flex items-center gap-4">
                 {index > 0 ? (
                   <span aria-hidden className="text-slate-600">
                     •

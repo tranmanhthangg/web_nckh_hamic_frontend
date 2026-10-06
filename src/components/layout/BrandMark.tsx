@@ -1,14 +1,31 @@
 import { cn } from '@/lib/cn'
+import { logoSrc } from '@/data/site'
 
 interface BrandMarkProps {
+  /**
+   * Đường dẫn ảnh logo (vd: '/logo.png'). Bỏ trống sẽ đọc mặc định từ
+   * `logoSrc` trong src/data/site.ts; nếu giá trị rỗng thì dùng SVG mặc định.
+   */
+  src?: string
   className?: string
 }
 
 /**
  * Biểu trưng vòng tròn lồng nhau của Khoa Toán - Cơ - Tin học.
  * Bản mẫu dùng ảnh raster; bản tái tạo vẽ lại bằng SVG để không cần tài nguyên ảnh.
+ * Truyền `src` (hoặc khai báo `logoSrc` ở data/site.ts) để dùng ảnh làm logo.
  */
-export function BrandMark({ className }: BrandMarkProps) {
+export function BrandMark({ src = logoSrc, className }: BrandMarkProps) {
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt="Biểu trưng Khoa Toán - Cơ - Tin học"
+        className={cn('h-11 w-20 shrink-0 object-contain', className)}
+      />
+    )
+  }
+
   return (
     <svg
       viewBox="0 0 84 46"

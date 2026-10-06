@@ -43,7 +43,7 @@ export function DebugRbacBar() {
         <div
           role="group"
           aria-label="Chọn vai trò kiểm thử phân quyền"
-          className="flex flex-wrap items-center gap-1"
+          className="ml-auto flex flex-wrap items-center gap-1"
         >
           {roles.map((item) => {
             const Icon = roleIcons[item.id]
@@ -73,7 +73,7 @@ export function DebugRbacBar() {
         <button
           type="button"
           onClick={hideDebugBar}
-          className="ml-auto inline-flex items-center gap-2 text-xs font-semibold text-emerald-400 transition-colors hover:text-emerald-300"
+          className="ml-6 inline-flex items-center gap-2 text-xs font-semibold text-emerald-400 transition-colors hover:text-emerald-300"
         >
           <CircleCheck size={14} aria-hidden />
           Đóng thanh gỡ lỗi

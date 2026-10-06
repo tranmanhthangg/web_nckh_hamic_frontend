@@ -14,7 +14,7 @@ export function HeroSection() {
         {homeHero.title}
       </h1>
 
-      <p className="mx-auto mt-3 max-w-2xl text-base text-slate-600">
+      <p className="mx-auto mt-3 text-base text-slate-600">
         {homeHero.subtitle}
       </p>
 
@@ -23,8 +23,12 @@ export function HeroSection() {
         className="mx-auto mt-7 max-w-3xl"
         onSubmit={(event) => {
           event.preventDefault()
-          const value = new FormData(event.currentTarget).get('q')
-          navigate(buildPath('/tim-kiem', { q: String(value ?? '') }))
+          const value = String(
+            new FormData(event.currentTarget).get('q') ?? '',
+          ).trim()
+          // Không nhập gì → không điều hướng.
+          if (!value) return
+          navigate(buildPath('/tim-kiem', { q: value }))
         }}
       >
         <SearchInput

@@ -33,8 +33,15 @@ export const portalBar = {
 
 /** Khối nhận diện ở header. */
 export const headerContent = {
-  kicker: 'CÔNG TRI THỨC HỌC THUẬT',
+  kicker: 'CỔNG TRI THỨC HỌC THUẬT',
   wordmark: 'KHOA TOÁN - CƠ - TIN HỌC',
   subline: 'Mathematics, Mechanics and Informatics • HUS',
   searchPlaceholder: 'Tìm công trình, giảng viên, khóa luận, DOI...',
 }
+
+/**
+ * Đường dẫn ảnh logo dùng chung cho Header & Footer.
+ * Đặt file ảnh vào thư mục `public/` rồi điền đường dẫn, ví dụ: '/logo.png'.
+ * Để trống ('') sẽ dùng biểu trưng SVG mặc định trong BrandMark.tsx.
+ */
+export const logoSrc = '/logo.png'

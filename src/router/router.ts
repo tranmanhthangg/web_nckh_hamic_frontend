@@ -22,11 +22,14 @@ function parseHash(rawHash: string): RouterState {
 
   const query: Record<string, string> = {}
   if (queryPart) {
+    // URLSearchParams encode space thành '+', nên decode '+' về space trước.
+    const decode = (raw: string) =>
+      decodeURIComponent(raw.replace(/\+/g, ' '))
     for (const pair of queryPart.split('&')) {
       if (!pair) continue
       const [key, value = ''] = pair.split('=')
       if (!key) continue
-      query[decodeURIComponent(key)] = decodeURIComponent(value)
+      query[decode(key)] = decode(value)
     }
   }
 
