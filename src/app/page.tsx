@@ -1,13 +1,8 @@
-/**
- * Trang tạm thời để kiểm tra công cụ build. Sẽ được thay bằng HomePage
- * ở Giai đoạn 4 (sau khi các component tương tác có 'use client').
- */
+import { HomePage } from '@/views/HomePage'
+
+/** Trang chủ — ghép HomePage hiện có (Server Component, lồng client children). */
 export default function IndexPage() {
-  return (
-    <main className="container">
-      <h1 className="text-brand-dark">Kiểm tra khung Next.js — Giai đoạn 1</h1>
-    </main>
-  )
+  return <HomePage />
 }
 
 

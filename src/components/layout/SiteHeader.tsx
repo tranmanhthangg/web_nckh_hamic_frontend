@@ -1,3 +1,5 @@
+'use client'
+
 import { Bell, ChevronDown, CirclePlus, LogOut } from 'lucide-react'
 import { roles } from '@/data/rbac'
 import { headerContent } from '@/data/site'

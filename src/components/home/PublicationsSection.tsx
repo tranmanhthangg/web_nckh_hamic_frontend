@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { ArrowRight, FileText } from 'lucide-react'
 import { publicationsSection } from '@/data/home'
