@@ -3,7 +3,7 @@ import { announcementKindLabels, announcements } from '@/data/announcements'
 import { labs } from '@/data/labs'
 import { mentors } from '@/data/mentors'
 import { publicationKindLabels, publications } from '@/data/publications'
-import { PlaceholderPage } from '@/pages/PlaceholderPage'
+import { PlaceholderPage } from '@/views/PlaceholderPage'
 
 export function PublicationDetailPage({ id }: { id: string }) {
   const publication = publications.find((item) => item.id === id)

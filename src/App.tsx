@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
 import { AppShell } from '@/components/layout/AppShell'
-import { HomePage } from '@/pages/HomePage'
-import { SearchPage } from '@/pages/SearchPage'
-import { PillarsPage } from '@/pages/PillarsPage'
-import { MentorsPage } from '@/pages/MentorsPage'
-import { LabsPage } from '@/pages/LabsPage'
+import { HomePage } from '@/views/HomePage'
+import { SearchPage } from '@/views/SearchPage'
+import { PillarsPage } from '@/views/PillarsPage'
+import { MentorsPage } from '@/views/MentorsPage'
+import { LabsPage } from '@/views/LabsPage'
 import {
   AnnouncementsPage,
   LabDetailPage,
   MentorDetailPage,
   NotFoundPage,
   PublicationDetailPage,
-} from '@/pages/DetailPages'
+} from '@/views/DetailPages'
 import { useRoute } from '@/router/useRoute'
 import type { RouterState } from '@/router/router'
 
