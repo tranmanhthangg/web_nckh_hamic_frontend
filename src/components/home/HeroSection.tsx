@@ -1,11 +1,15 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 import { homeHero } from '@/data/home'
-import { buildPath, navigate } from '@/router/router'
+import { buildPath } from '@/router/router'
 import { Card } from '@/components/ui/Card'
 import { Chip } from '@/components/ui/Chip'
 import { SearchInput } from '@/components/ui/SearchInput'
 
 export function HeroSection() {
+  const router = useRouter()
   return (
     <Card className="px-6 py-10 text-center sm:px-8 sm:py-12">
       <p className="text-base text-slate-600">{homeHero.kicker}</p>
@@ -28,7 +32,7 @@ export function HeroSection() {
           ).trim()
           // Không nhập gì → không điều hướng.
           if (!value) return
-          navigate(buildPath('/tim-kiem', { q: value }))
+          router.push(buildPath('/tim-kiem', { q: value }))
         }}
       >
         <SearchInput

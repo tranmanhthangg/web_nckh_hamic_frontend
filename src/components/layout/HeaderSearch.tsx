@@ -1,7 +1,10 @@
+'use client'
+
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/cn'
 import { headerContent } from '@/data/site'
-import { buildPath, navigate } from '@/router/router'
+import { buildPath } from '@/router/router'
 import { SearchInput } from '@/components/ui/SearchInput'
 
 interface HeaderSearchProps {
@@ -14,6 +17,7 @@ export function HeaderSearch({
   className,
   shape = 'pill',
 }: HeaderSearchProps) {
+  const router = useRouter()
   const [value, setValue] = useState('')
 
   return (
@@ -25,7 +29,7 @@ export function HeaderSearch({
         const query = value.trim()
         // Không nhập gì → không điều hướng.
         if (!query) return
-        navigate(buildPath('/tim-kiem', { q: query }))
+        router.push(buildPath('/tim-kiem', { q: query }))
         // Tự xóa text trên header sau khi đã gửi sang trang Tìm kiếm.
         setValue('')
       }}

@@ -1,4 +1,7 @@
+'use client'
+
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Bookmark,
   Download,
@@ -9,7 +12,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { useAuth } from '@/features/auth/auth-context'
-import { buildPath, navigate } from '@/router/router'
+import { buildPath } from '@/router/router'
 import { Avatar } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -27,6 +30,7 @@ export function PublicationCard({
   className,
 }: PublicationCardProps) {
   const { hasPermission, openAuthModal } = useAuth()
+  const router = useRouter()
   const [saved, setSaved] = useState(false)
 
   const canReadFulltext = hasPermission('fulltext:read')
@@ -36,7 +40,7 @@ export function PublicationCard({
       openAuthModal('login')
       return
     }
-    navigate(buildPath(`/cong-trinh/${publication.id}`))
+    router.push(buildPath(`/cong-trinh/${publication.id}`))
   }
 
   return (

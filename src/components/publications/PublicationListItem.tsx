@@ -1,3 +1,6 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
 import {
   Download,
   ExternalLink,
@@ -8,7 +11,7 @@ import {
 import { cn } from '@/lib/cn'
 import { publicationKindLabels } from '@/data/publications'
 import { useAuth } from '@/features/auth/auth-context'
-import { buildPath, navigate } from '@/router/router'
+import { buildPath } from '@/router/router'
 import { Avatar } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -30,6 +33,7 @@ export function PublicationListItem({
   className,
 }: PublicationListItemProps) {
   const { hasPermission, openAuthModal } = useAuth()
+  const router = useRouter()
 
   return (
     <article
@@ -114,7 +118,7 @@ export function PublicationListItem({
                 openAuthModal('login')
                 return
               }
-              navigate(buildPath(`/cong-trinh/${publication.id}`))
+              router.push(buildPath(`/cong-trinh/${publication.id}`))
             }}
           >
             Xem PDF

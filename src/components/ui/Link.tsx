@@ -1,18 +1,21 @@
+import NextLink from 'next/link'
 import type { AnchorHTMLAttributes, ReactNode } from 'react'
 
-interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-  /** Đường dẫn nội bộ, ví dụ "/tim-kiem" — sẽ được nối vào hash router. */
+interface LinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
+  /** Đường dẫn nội bộ, ví dụ "/tim-kiem" — ánh xạ thẳng thành href của next/link. */
   to: string
   children: ReactNode
 }
 
 /**
- * Điều hướng nội bộ dựa trên hash (#/duong-dan) — không cần thư viện router.
+ * Điều hướng nội bộ — adapter above next/link, giữ nguyên API `to` để
+ * không phải sửa các call-site. Hành vi Back/Forward/Prefetch do App Router lo.
  */
 export function Link({ to, children, ...rest }: LinkProps) {
   return (
-    <a href={`#${to}`} {...rest}>
+    <NextLink href={to} {...rest}>
       {children}
-    </a>
+    </NextLink>
   )
 }
+

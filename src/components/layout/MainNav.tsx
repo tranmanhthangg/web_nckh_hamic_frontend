@@ -1,8 +1,10 @@
+'use client'
+
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { navItems } from '@/data/navigation'
-import { useRoute } from '@/router/useRoute'
 import { HeaderSearch } from '@/components/layout/HeaderSearch'
 import { Container } from '@/components/ui/Container'
 import { Link } from '@/components/ui/Link'
@@ -14,7 +16,7 @@ function isActiveRoute(currentPath: string, itemPath: string): boolean {
 }
 
 export function MainNav() {
-  const route = useRoute()
+  const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
 
   const closeMenu = () => setMenuOpen(false)
@@ -28,7 +30,7 @@ export function MainNav() {
         <ul className="hidden h-12 items-center gap-1 lg:flex">
           {navItems.map((item) => {
             const Icon = item.icon
-            const isActive = isActiveRoute(route.path, item.path)
+            const isActive = isActiveRoute(pathname, item.path)
 
             return (
               <li key={item.path}>
@@ -56,7 +58,7 @@ export function MainNav() {
 
         <div className="flex h-12 items-center justify-between gap-3 lg:hidden">
           <span className="text-sm font-semibold text-slate-700">
-            {navItems.find((item) => isActiveRoute(route.path, item.path))
+            {navItems.find((item) => isActiveRoute(pathname, item.path))
               ?.label ?? 'Danh mục'}
           </span>
           <button
@@ -84,7 +86,7 @@ export function MainNav() {
             <ul className="space-y-1">
               {navItems.map((item) => {
                 const Icon = item.icon
-                const isActive = isActiveRoute(route.path, item.path)
+                const isActive = isActiveRoute(pathname, item.path)
 
                 return (
                   <li key={item.path}>
