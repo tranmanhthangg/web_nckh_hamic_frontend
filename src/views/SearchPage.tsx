@@ -1,11 +1,13 @@
+'use client'
+
 import { useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Filter, RotateCcw, Sparkles } from 'lucide-react'
 import { domains } from '@/data/domains'
 import {
   publicationKindLabels,
   publications,
 } from '@/data/publications'
-import { useRoute } from '@/router/useRoute'
 import { PublicationResults } from '@/components/publications/PublicationResults'
 import { PublicationViewToggle } from '@/components/publications/PublicationViewToggle'
 import type { PublicationView } from '@/components/publications/PublicationViewToggle'
@@ -45,10 +47,10 @@ const sortOptions = [
 ]
 
 export function SearchPage() {
-  const route = useRoute()
-  const [query, setQuery] = useState(route.query.q ?? '')
-  const [domain, setDomain] = useState(route.query.domain ?? 'all')
-  const [kind, setKind] = useState(route.query.kind ?? 'all')
+  const searchParams = useSearchParams()
+  const [query, setQuery] = useState(searchParams.get('q') ?? '')
+  const [domain, setDomain] = useState(searchParams.get('domain') ?? 'all')
+  const [kind, setKind] = useState(searchParams.get('kind') ?? 'all')
   const [sort, setSort] = useState('newest')
   const [view, setView] = useState<PublicationView>('grid')
 

@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo, useState } from 'react'
 import { FlaskConical } from 'lucide-react'
 import { labs } from '@/data/labs'
