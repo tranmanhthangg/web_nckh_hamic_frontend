@@ -1,15 +1,18 @@
 # Bản tái tạo giao diện MIM-HUS (Web NCKH) — Khoa Toán – Cơ – Tin học
 
-Dự án React + TypeScript + Vite + Tailwind CSS v4 tái tạo lại giao diện cổng
-thông tin nghiên cứu khoa học của Viện Toán – Cơ – Tin học (MIM-HUS), dựa trên
-bộ ảnh chụp màn hình của bản mẫu.
+Dự án Next.js (App Router) + React 19 + TypeScript + Tailwind CSS v4 tái tạo lại
+giao diện cổng thông tin nghiên cứu khoa học của Viện Toán – Cơ – Tin học
+(MIM-HUS), dựa trên bộ ảnh chụp màn hình của bản mẫu.
 
 ## Công nghệ
 
-- Vite 8 + React 19 + TypeScript
-- Tailwind CSS v4 (theo `@tailwindcss/vite`, token trong `src/index.css`)
+- **Next.js 16 (App Router)** + React 19 + TypeScript
+- Tailwind CSS v4 (qua `@tailwindcss/postcss`, token trong `src/index.css`)
 - `lucide-react` cho icon
-- **Không** dùng thư viện router: bộ định tuyến hash tự viết trong `src/router`
+- **Điều hướng bằng file-based routing** của App Router — đã thay thế bộ hash
+  router tự viết (chuyển đổi trên nhánh `migration/nextjs`; liên kết hash cũ
+  dạng `/#/tru-cot` được `src/components/layout/HashRedirect.tsx` tự chuyển
+  sang `/tru-cot`)
 - **Không** dùng backend: dữ liệu là hằng số trong `src/data`, đăng nhập/phân
   quyền là mô phỏng phía client
 
@@ -17,61 +20,57 @@ bộ ảnh chụp màn hình của bản mẫu.
 
 ```bash
 npm install
-npm run dev        # chạy dev server
-npm run build      # tsc -b + vite build
-npm run lint       # eslint
-npm run preview    # xem bản build
+npm run dev      # dev server → http://localhost:3000
+npm run build    # build production
+npm run start    # chạy bản production
+npm run lint     # eslint
 ```
 
 ## Điều hướng
 
-Bản mẫu là một SPA chỉ hiện shell, nên bản tái tạo dùng hash route để có deep
-link và nút Back/Forward mà không cần cấu hình server:
+| Đường dẫn         | Trang                                              |
+| ----------------- | -------------------------------------------------- |
+| `/`               | Trang chủ                                          |
+| `/tru-cot`        | 5 trụ cột nghiên cứu                               |
+| `/tim-kiem`       | Tìm kiếm & tra cứu (`?q=&domain=&kind=`)           |
+| `/cong-trinh/:id` | Chi tiết công trình                                |
+| `/giang-vien`     | Giảng viên & mentors                               |
+| `/giang-vien/:id` | Hồ sơ giảng viên                                   |
+| `/lab`            | Phòng thí nghiệm / Lab                            |
+| `/lab/:id`        | Chi tiết Lab                                       |
+| `/thong-bao`      | Thông báo                                          |
 
-| Đường dẫn             | Trang                                              |
-| --------------------- | -------------------------------------------------- |
-| `#/`                  | Trang chủ                                          |
-| `#/tru-cot`           | 5 trụ cột nghiên cứu                                |
-| `#/tim-kiem`          | Tìm kiếm & tra cứu (`?q=&domain=&kind=`)           |
-| `#/cong-trinh/:id`    | Chi tiết công trình                                 |
-| `#/giang-vien`        | Giảng viên & mentors                                |
-| `#/giang-vien/:id`    | Hồ sơ giảng viên                                    |
-| `#/lab`               | Phòng thí nghiệm / Lab                              |
-| `#/lab/:id`           | Chi tiết Lab                                        |
-| `#/thong-bao`         | Thông báo                                           |
+Đường dẫn lạ trả về `not-found.tsx` (giao diện 404 dùng chung).
 
 ## Cấu trúc mã nguồn
 
 ```
 src/
-  components/
-    layout/     PortalBar, AppHeader/SiteHeader, MainNav, AppShell, SiteFooter,
-                BrandMark, HeaderSearch, DebugRbacBar
-    home/       HeroSection, PillarGrid, PublicationsSection, HomeSidebar,
-                MentorSidebarList, LabSidebarList
-    pillars/    PillarCard
-    mentors/    MentorCard
-    labs/       LabCard
-    publications/ PublicationCard, PublicationListItem, PublicationCover,
-                PublicationResults, PublicationViewToggle
-    ui/         Button, IconButton, Card, Modal, Select, TextField, SearchInput,
-                Badge, Chip, Avatar, Checkbox, Container, PageHero,
-                SectionHeader, SegmentedToggle, FilterTabs, EmptyNotice
-  data/         site, navigation, home, announcements, publications, mentors,
-                labs, domains, rbac
-  features/auth/ AuthProvider, auth-context, AuthModal
-  lib/          cn() – ghép class không phụ thuộc thư viện ngoài
-  pages/        HomePage, PillarsPage, MentorsPage, LabsPage, SearchPage,
-                DetailPages, PlaceholderPage
-  router/       router.ts (parse hash + phân tích query), useRoute.ts
-  types/        Kiểu dữ liệu dùng chung
+  app/            # App Router
+    layout.tsx    #   root layout: metadata (title/description), Google Fonts,
+                  #   HashRedirect, AuthProvider + AppShell bọc toàn trang
+    page.tsx      #   Trang chủ
+    not-found.tsx #   404
+    tim-kiem/ tru-cot/ giang-vien/ lab/ cong-trinh/ thong-bao/
+                  #   1 thư mục = 1 route, mỗi route 1 page.tsx
+  components/     # giữ nguyên theo feature: layout/ ui/ home/ pillars/
+                  #   mentors/ labs/ publications/ — thêm 'use client' ở boundary
+                  #   thật sự cần tương tác phía trình duyệt
+  data/           # site, navigation, home, announcements, publications, mentors,
+                  #   labs, domains, rbac
+  features/auth/  # AuthProvider, auth-context, AuthModal
+  lib/            # cn() – ghép class không phụ thuộc thư viện ngoài
+  views/          # component trang (đổi tên từ src/pages để Next không hiểu
+                  #   nhầm thành Pages Router); app/**/page.tsx import từ đây
+  router/         # buildPath() – ghép URL; điều hướng do next/navigation lo
+  types/          # Kiểu dữ liệu dùng chung
 ```
 
 ## Đăng nhập & phân quyền (mô phỏng)
 
 - Thanh debug RBAC nằm trên cùng cho phép đổi nhanh giữa các vai trò:
   **Guest** (không đăng nhập), **Sinh viên**, **Giảng viên**, **Admin**.
-- Quyền được định nghĩa trong `src/data/rbac.ts`, ví dụ `publication:fulltext`.
+- Quyền được định nghĩa trong `src/data/rbac.ts`, ví dụ `fulltext:read`.
 - Xem toàn văn công trình cần quyền `fulltext:read`; với khách chưa đăng nhập,
   thao tác này mở modal đăng nhập/đăng ký thay vì hiện nội dung.
 - Trạng thái phiên chỉ tồn tại trong bộ nhớ của tab (không `localStorage`) để
@@ -86,3 +85,4 @@ src/
 - Các trang chưa có ảnh chụp (chi tiết công trình/giảng viên/Lab, thông báo) dùng
   `PlaceholderPage`: hiển thị đúng dữ liệu quan sát được kèm ghi chú cho biết
   phần bố cục chưa được tái tạo.
+
