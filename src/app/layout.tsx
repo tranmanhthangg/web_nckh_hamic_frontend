@@ -1,13 +1,37 @@
 import type { Metadata } from 'next'
+import { JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google'
 import '@/index.css'
 import { AppShell } from '@/components/layout/AppShell'
 import { HashRedirect } from '@/components/layout/HashRedirect'
 import { AuthProvider } from '@/features/auth/AuthProvider'
+import { siteUrl } from '@/lib/site-url'
+
+/**
+ * Font tự host qua next/font (thay cho <link> Google Fonts của index.html cũ):
+ * preload + font metric fallback, vẫn dùng đúng family/weight trước đây.
+ */
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin', 'vietnamese'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+  variable: '--font-plus-jakarta-sans',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin', 'vietnamese'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
+})
 
 /** metadata thay cho <title>/<meta description> trong index.html cũ. */
 export const metadata: Metadata = {
-  title:
-    'HUS MIM - Kho Lưu trữ Tài liệu Nghiên cứu Khoa học | Khoa Toán - Cơ - Tin học',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default:
+      'HUS MIM - Kho Lưu trữ Tài liệu Nghiên cứu Khoa học | Khoa Toán - Cơ - Tin học',
+    template: '%s | HUS MIM',
+  },
   description:
     'Cổng Tri thức Học thuật MIM — Kho lưu trữ tài liệu nghiên cứu khoa học của Khoa Toán - Cơ - Tin học, Trường Đại học Khoa học Tự nhiên, ĐHQGHN.',
   icons: { icon: '/favicon.svg' },
@@ -25,17 +49,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="vi">
-      <body>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
+      <body
+        className={`${plusJakartaSans.variable} ${jetbrainsMono.variable}`}
+      >
         <HashRedirect />
         <AuthProvider>
           <AppShell>{children}</AppShell>

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { cn } from '@/lib/cn'
 import { logoSrc } from '@/data/site'
 
@@ -18,9 +19,11 @@ interface BrandMarkProps {
 export function BrandMark({ src = logoSrc, className }: BrandMarkProps) {
   if (src) {
     return (
-      <img
+      <Image
         src={src}
         alt="Biểu trưng Khoa Toán - Cơ - Tin học"
+        width={80}
+        height={44}
         className={cn('h-11 w-20 shrink-0 object-contain', className)}
       />
     )
