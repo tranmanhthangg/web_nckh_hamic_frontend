@@ -1,7 +1,7 @@
 /**
  * Ghép đường dẫn kèm query, dùng cho các link tìm kiếm/bộ lọc.
- * (Bộ hash router cũ đã bị thay thế bằng App Router của Next.js —
- * `navigate`/`useRoute` sống ở next/navigation và components tương ứng.)
+ * (Bộ hash router cũ đã bị thay thế hoàn toàn bằng App Router — điều hướng
+ * do `next/navigation` đảm nhiệm; file này chỉ còn `buildPath`.)
  */
 export function buildPath(
   path: string,

@@ -38,8 +38,8 @@ export const metadata: Metadata = {
 }
 
 /**
- * Root layout — thay thế index.html + main.tsx của Vite:
- * - Google Fonts nạp y hệt bằng <link> như index.html (React tự chuyển lên <head>).
+ * Root layout:
+ * - Font self-host qua next/font (biến --font-* nối sang token Tailwind).
  * - AuthProvider bọc ngoài AppShell để trạng thái RBAC sống xuyên suốt các lần
  *   navigate (layout không bị remount).
  * - HashRedirect chuyển tiếp link hash cũ dạng /#/... sang đường dẫn App Router.
