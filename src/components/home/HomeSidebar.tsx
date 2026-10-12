@@ -1,5 +1,5 @@
 import { ArrowRight, Bell, Building2, GraduationCap, TrendingUp } from 'lucide-react'
-import { announcementKindLabels, announcementTotal, announcements } from '@/data/announcements'
+import { announcementKindLabels, announcements } from '@/data/announcements'
 import { hotResearchTopics } from '@/data/home'
 import { Chip } from '@/components/ui/Chip'
 import { Link } from '@/components/ui/Link'
@@ -58,10 +58,11 @@ export function HomeSidebar() {
       <section className="pt-6">
         <SectionHeader
           icon={Bell}
-          title="Lịch bảo vệ & Thông báo"
+          title="Thông báo"
           action={
             <Link to="/thong-bao" className={sideLinkClass}>
-              Xem ({announcementTotal})
+              Xem
+              <ArrowRight size={14} aria-hidden />
             </Link>
           }
         />

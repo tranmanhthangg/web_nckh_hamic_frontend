@@ -44,17 +44,17 @@ export function SiteFooter() {
   return (
     <footer className="bg-[#0B1B2E] text-slate-300">
       <Container className="py-12 lg:py-14">
-        <div className="grid gap-10 lg:grid-cols-4">
+        <div className="grid gap-10 lg:grid-cols-4 xl:grid-cols-[1.35fr_1fr_1fr_1fr]">
           <div>
             <div className="flex items-start gap-4">
               <span className="rounded-lg border border-white/15 bg-white/5 p-2">
                 <BrandMark className="h-10 w-16" />
               </span>
               <span>
-                <span className="block text-base font-extrabold text-white">
+                <span className="block text-base font-extrabold text-white xl:whitespace-nowrap">
                   {siteIdentity.wordmark}
                 </span>
-                <span className="block text-sm text-slate-300">
+                <span className="block text-sm text-slate-300 xl:whitespace-nowrap">
                   {siteIdentity.unit}
                 </span>
               </span>
@@ -140,7 +140,13 @@ export function SiteFooter() {
                   className="mt-1 shrink-0 text-brand-light"
                   aria-hidden
                 />
-                <span>{siteIdentity.emails.join(' • ')}</span>
+                <span className="flex flex-col gap-y-1">
+                  {siteIdentity.emails.map((email) => (
+                    <span key={email} className="whitespace-nowrap">
+                      {email}
+                    </span>
+                  ))}
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin

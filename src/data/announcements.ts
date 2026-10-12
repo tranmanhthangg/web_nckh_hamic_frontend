@@ -1,8 +1,8 @@
 import type { Announcement } from '@/types'
 
 /**
- * Khối "LỊCH BẢO VỆ & THÔNG BÁO" ở sidebar Trang chủ.
- * Bản mẫu hiển thị 2 thông báo mới nhất và link "Xem (4)".
+ * Khối "THÔNG BÁO" ở sidebar Trang chủ.
+ * Bản mẫu hiển thị 2 thông báo mới nhất và link "Xem".
  */
 export const announcements: Announcement[] = [
   {
@@ -23,6 +23,3 @@ export const announcementKindLabels = {
   news: 'news',
   defense: 'defense',
 } as const
-
-/** Tổng số thông báo hiển thị ở link "Xem (4)" — quan sát được. */
-export const announcementTotal = 4

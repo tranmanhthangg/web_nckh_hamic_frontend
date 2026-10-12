@@ -3,7 +3,6 @@ import { cn } from '@/lib/cn'
 export interface FilterTabItem {
   value: string
   label: string
-  count?: number
 }
 
 interface FilterTabsProps {
@@ -45,7 +44,6 @@ export function FilterTabs({
             )}
           >
             {item.label}
-            {typeof item.count === 'number' ? ` (${item.count})` : null}
           </button>
         )
       })}
