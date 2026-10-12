@@ -18,11 +18,14 @@ const coverStyles: Record<PublicationKind, string> = {
 interface PublicationCoverProps {
   publication: Publication
   className?: string
+  /** Ẩn năm ở dòng meta dưới bìa — chỉ giữ tên thể loại đề tài. */
+  hideYear?: boolean
 }
 
 export function PublicationCover({
   publication,
   className,
+  hideYear = false,
 }: PublicationCoverProps) {
   return (
     <div
@@ -34,22 +37,33 @@ export function PublicationCover({
     >
       <div className="absolute inset-0 bg-linear-to-t from-slate-900/85 via-slate-900/20 to-transparent" />
 
-      <span className="absolute top-3 left-4 text-[11px] font-bold tracking-wide text-white/95 uppercase">
-        MIM-HUS • ĐHQGHN
-      </span>
-      <Badge
-        tone="brand"
-        className="absolute top-3 right-4 border-transparent bg-brand text-white"
-      >
-        <FileText size={12} aria-hidden />
-        PDF
-      </Badge>
+      {/*
+        Hai nhãn trong một hàng flex + justify-between: bìa rộng (dạng ô) badge
+        nằm gọn góc phải, bìa hẹp (dạng danh sách, w-48) badge tự xuống dòng
+        và căn lề trái.
+      */}
+      <div className="absolute top-3 right-4 left-4 flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+        <span className="text-[11px] font-bold tracking-wide text-white/95 uppercase">
+          MIM-HUS • ĐHQGHN
+        </span>
+        <Badge
+          tone="brand"
+          className="border-transparent bg-brand text-white"
+        >
+          <FileText size={12} aria-hidden />
+          PDF
+        </Badge>
+      </div>
 
       <div className="absolute inset-x-4 bottom-3">
         <p className="text-[11px] font-bold tracking-wide text-amber-200 uppercase">
           {publicationKindLabels[publication.kind]}
-          {' • '}
-          {publication.year}
+          {hideYear ? null : (
+            <>
+              {' • '}
+              {publication.year}
+            </>
+          )}
         </p>
         <p className="mt-1 line-clamp-2 text-sm font-bold text-white">
           {publication.title}

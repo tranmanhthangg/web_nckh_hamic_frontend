@@ -19,7 +19,7 @@ export function PillarGrid() {
           <Link
             key={domain.code}
             to="/tru-cot"
-            className="group rounded-xl border border-slate-200 bg-white p-4 transition-shadow hover:shadow-md"
+            className="group flex flex-col rounded-xl border border-slate-200 bg-white p-4 transition-shadow hover:shadow-md"
           >
             <span className="flex items-center justify-between gap-2">
               <Badge tone="slate" mono>
@@ -32,11 +32,11 @@ export function PillarGrid() {
               />
             </span>
 
-            <span className="mt-4 block text-base leading-snug font-bold text-brand-dark">
+            <span className="mt-4 min-h-10 text-left text-sm font-bold leading-snug text-brand-dark">
               {domain.name}
             </span>
 
-            <span className="mt-3 block text-sm text-slate-500">
+            <span className="mt-auto pt-3 text-sm text-slate-500">
               <span className="font-semibold text-slate-700">
                 {domain.homeDocuments}
               </span>{' '}

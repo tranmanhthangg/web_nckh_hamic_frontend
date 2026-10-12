@@ -1,20 +1,22 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import {
+  Bookmark,
   Download,
   ExternalLink,
   Eye,
-  FileText,
   GraduationCap,
+  Quote,
 } from 'lucide-react'
 import { cn } from '@/lib/cn'
-import { publicationKindLabels } from '@/data/publications'
 import { useAuth } from '@/features/auth/auth-context'
 import { buildPath } from '@/router/router'
 import { Avatar } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+import { IconButton } from '@/components/ui/IconButton'
 import { PublicationCover } from '@/components/publications/PublicationCover'
 import type { Publication } from '@/types'
 
@@ -34,6 +36,7 @@ export function PublicationListItem({
 }: PublicationListItemProps) {
   const { hasPermission, openAuthModal } = useAuth()
   const router = useRouter()
+  const [saved, setSaved] = useState(false)
 
   return (
     <article
@@ -44,6 +47,7 @@ export function PublicationListItem({
     >
       <PublicationCover
         publication={publication}
+        hideYear
         className="sm:aspect-[4/3] sm:h-auto sm:w-48 sm:shrink-0"
       />
 
@@ -53,7 +57,7 @@ export function PublicationListItem({
             {publication.domainLabel}
           </Badge>
           <span className="text-sm text-slate-500">
-            {publicationKindLabels[publication.kind]} • Năm{' '}
+            Năm{' '}
             <span className="font-semibold text-slate-700">
               {publication.year}
             </span>
@@ -104,26 +108,39 @@ export function PublicationListItem({
               <Download size={16} className="text-slate-400" aria-hidden />
               {publication.downloads}
             </span>
-            <span className="inline-flex items-center gap-1.5">
-              <FileText size={16} className="text-slate-400" aria-hidden />
-              PDF
-            </span>
           </div>
 
-          <Button
-            size="sm"
-            className="h-8"
-            onClick={() => {
-              if (!hasPermission('fulltext:read')) {
-                openAuthModal('login')
-                return
-              }
-              router.push(buildPath(`/cong-trinh/${publication.id}`))
-            }}
-          >
-            Xem PDF
-            <ExternalLink size={14} aria-hidden />
-          </Button>
+          <div className="flex items-center gap-1">
+            <IconButton label="Sao chép trích dẫn" className="size-8">
+              <Quote size={18} aria-hidden />
+            </IconButton>
+            <IconButton
+              label={saved ? 'Bỏ lưu công trình' : 'Lưu công trình'}
+              aria-pressed={saved}
+              onClick={() => setSaved((value) => !value)}
+              className="size-8"
+            >
+              <Bookmark
+                size={18}
+                className={saved ? 'fill-brand text-brand' : undefined}
+                aria-hidden
+              />
+            </IconButton>
+            <Button
+              size="sm"
+              className="ml-1 h-8"
+              onClick={() => {
+                if (!hasPermission('fulltext:read')) {
+                  openAuthModal('login')
+                  return
+                }
+                router.push(buildPath(`/cong-trinh/${publication.id}`))
+              }}
+            >
+              Xem PDF
+              <ExternalLink size={14} aria-hidden />
+            </Button>
+          </div>
         </div>
       </div>
     </article>

@@ -50,7 +50,7 @@ export function PublicationCard({
         className,
       )}
     >
-      <PublicationCover publication={publication} />
+      <PublicationCover publication={publication} hideYear />
 
       <div className="flex flex-1 flex-col">
         <div className="flex-1 space-y-3 p-5">
@@ -114,9 +114,9 @@ export function PublicationCard({
           </div>
 
           <div className="flex items-center gap-1">
-            <span aria-hidden className="p-1.5 text-slate-400">
-              <Quote size={18} />
-            </span>
+            <IconButton label="Sao chép trích dẫn" className="size-8">
+              <Quote size={18} aria-hidden />
+            </IconButton>
             <IconButton
               label={saved ? 'Bỏ lưu công trình' : 'Lưu công trình'}
               aria-pressed={saved}

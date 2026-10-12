@@ -133,6 +133,3 @@ export function filterPublications(id: PublicationFilterId): Publication[] {
       return publications.filter((item) => item.domainCode === 'OPT')
   }
 }
-
-/** Số công trình ở link "Xem toàn bộ kho tài liệu (7 công trình)" — quan sát được. */
-export const libraryTotal = 7
