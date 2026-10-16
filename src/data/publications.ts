@@ -1,4 +1,4 @@
-import type { Publication, PublicationKind } from '@/types'
+import type { Publication, PublicationHonor, PublicationKind } from '@/types'
 
 /** Nhãn loại công trình in trên ảnh bìa — quan sát được nguyên văn. */
 export const publicationKindLabels: Record<PublicationKind, string> = {
@@ -6,6 +6,13 @@ export const publicationKindLabels: Record<PublicationKind, string> = {
   international: 'BÀI BÁO QUỐC TẾ (ISI/SCOPUS)',
   master: 'LUẬN VĂN THẠC SĨ',
   bachelor: 'KHÓA LUẬN CỬ NHÂN',
+}
+
+/** Nhãn chỉ số xếp hạng & vinh danh in cạnh loại công trình — đọc từ ảnh mẫu. */
+export const publicationHonorLabels: Record<PublicationHonor, string> = {
+  isi: 'ISI (Q1/Q2)',
+  scopus: 'Scopus',
+  'thesis-award': 'NCKH Xuất sắc',
 }
 
 /**
@@ -28,6 +35,7 @@ export const publications: Publication[] = [
     advisor: { title: 'TS.', name: 'Lê Hồng Phương' },
     views: 1250,
     downloads: 342,
+    honor: 'thesis-award',
   },
   {
     id: 'pub-xfem-crack',
@@ -42,6 +50,7 @@ export const publications: Publication[] = [
     advisor: { title: 'PGS.TS', name: 'Đỗ Duy Cường' },
     views: 2180,
     downloads: 521,
+    honor: 'isi',
   },
   {
     id: 'pub-ito-stability',
@@ -56,6 +65,7 @@ export const publications: Publication[] = [
     advisor: { title: 'GS.TSKH', name: 'Nguyễn Minh Trí' },
     views: 960,
     downloads: 289,
+    honor: 'isi',
   },
   {
     id: 'pub-mopso-green-vrptw',
@@ -70,6 +80,7 @@ export const publications: Publication[] = [
     advisor: { title: 'TS.', name: 'Nguyễn Thị Minh Tâm' },
     views: 1620,
     downloads: 410,
+    honor: 'thesis-award',
   },
   {
     id: 'pub-drl-actor-critic',
@@ -84,6 +95,7 @@ export const publications: Publication[] = [
     advisor: { title: 'TS.', name: 'Bùi Thế Duy' },
     views: 2450,
     downloads: 680,
+    honor: 'scopus',
   },
   {
     id: 'pub-kyber-fpga',

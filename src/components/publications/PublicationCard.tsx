@@ -70,7 +70,7 @@ export function PublicationCard({
             {publication.title}
           </h3>
 
-          <p className="text-sm text-slate-500">
+          <p className="truncate text-sm text-slate-500">
             Chuyên ngành:{' '}
             <span className="font-semibold text-slate-700">
               {publication.major}

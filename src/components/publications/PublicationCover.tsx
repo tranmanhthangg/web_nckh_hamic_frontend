@@ -2,6 +2,7 @@ import { FileText } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { publicationKindLabels } from '@/data/publications'
 import { Badge } from '@/components/ui/Badge'
+import { PublicationHonorTag } from '@/components/publications/PublicationHonorTag'
 import type { Publication, PublicationKind } from '@/types'
 
 /**
@@ -20,12 +21,15 @@ interface PublicationCoverProps {
   className?: string
   /** Ẩn năm ở dòng meta dưới bìa — chỉ giữ tên thể loại đề tài. */
   hideYear?: boolean
+  /** Ép badge PDF xuống hàng riêng (dùng cho bìa hẹp của dạng danh sách). */
+  stackPdf?: boolean
 }
 
 export function PublicationCover({
   publication,
   className,
   hideYear = false,
+  stackPdf = false,
 }: PublicationCoverProps) {
   return (
     <div
@@ -42,9 +46,19 @@ export function PublicationCover({
         nằm gọn góc phải, bìa hẹp (dạng danh sách, w-48) badge tự xuống dòng
         và căn lề trái.
       */}
+      {/*
+        Hàng badge trên bìa:
+        - Dạng ô: honor + PDF nằm cùng hàng (justify-between).
+        - Dạng danh sách (stackPdf): khối honor chiếm trọn hàng 1, badge PDF
+          luôn xuống hàng 2 (canh phải) — kể cả khi honor ngắn.
+      */}
       <div className="absolute top-3 right-4 left-4 flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
-        <span className="text-[11px] font-bold tracking-wide text-white/95 uppercase">
-          MIM-HUS • ĐHQGHN
+        <span className={stackPdf ? 'w-full' : undefined}>
+          {publication.honor ? (
+            <PublicationHonorTag honor={publication.honor} />
+          ) : (
+            <span aria-hidden />
+          )}
         </span>
         <Badge
           tone="brand"

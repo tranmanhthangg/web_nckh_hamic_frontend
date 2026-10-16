@@ -35,6 +35,12 @@ export type PublicationKind =
   | 'master'
   | 'bachelor'
 
+/** Chỉ số xếp hạng & vinh danh của công trình — đọc từ ảnh mẫu trang tìm kiếm. */
+export type PublicationHonor =
+  | 'isi'
+  | 'scopus'
+  | 'thesis-award'
+
 export interface Publication {
   id: string
   kind: PublicationKind
@@ -47,6 +53,8 @@ export interface Publication {
   advisor: { title: string; name: string }
   views: number
   downloads: number
+  /** Chỉ hiển thị khi có — bài Kyber-FPGA không có nhãn vinh danh trong ảnh mẫu. */
+  honor?: PublicationHonor
   doi?: string
 }
 

@@ -21,7 +21,7 @@ export function AppShell({ children }: AppShellProps) {
         <AppHeader />
       </div>
 
-      <main className="flex-1 py-8 lg:py-12">{children}</main>
+      <main className="flex-1 pt-4 pb-8 lg:pt-6 lg:pb-12">{children}</main>
 
       <SiteFooter />
       <AuthModal />

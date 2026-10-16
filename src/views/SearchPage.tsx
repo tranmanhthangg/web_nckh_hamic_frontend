@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useSyncExternalStore } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Filter, RotateCcw, Sparkles } from 'lucide-react'
 import { domains } from '@/data/domains'
@@ -8,6 +8,8 @@ import {
   publicationKindLabels,
   publications,
 } from '@/data/publications'
+import { mentors } from '@/data/mentors'
+import { cn } from '@/lib/cn'
 import { PublicationResults } from '@/components/publications/PublicationResults'
 import { PublicationViewToggle } from '@/components/publications/PublicationViewToggle'
 import type { PublicationView } from '@/components/publications/PublicationViewToggle'
@@ -39,6 +41,31 @@ const kindFilterOptions = [
   })),
 ]
 
+// [suy luận] các trường mới trong ảnh mẫu — chỉ dựng giao diện, chưa lọc theo dữ liệu thật.
+const honorFilterOptions = [
+  { value: 'isi', label: 'ISI (Q1/Q2)' },
+  { value: 'scopus', label: 'Scopus' },
+  { value: 'thesis-award', label: 'Khóa luận xuất sắc & Giải NCKH' },
+]
+
+const advisorFilterOptions = [
+  { value: 'all', label: 'Tất cả giảng viên hướng dẫn' },
+  ...mentors.map((mentor) => ({
+    value: mentor.id,
+    label: `${mentor.title} ${mentor.name}`,
+  })),
+]
+
+const yearFilterOptions = (() => {
+  const years = [...new Set(publications.map((item) => item.year))].sort(
+    (a, b) => b - a,
+  )
+  return [
+    { value: 'all', label: 'Tất cả các năm' },
+    ...years.map((year) => ({ value: String(year), label: `Năm ${year}` })),
+  ]
+})()
+
 // [suy luận] bản mẫu chỉ hiển thị giá trị "Mới nhất" trong ô sắp xếp.
 const sortOptions = [
   { value: 'newest', label: 'Mới nhất' },
@@ -46,13 +73,60 @@ const sortOptions = [
   { value: 'downloads', label: 'Tải nhiều nhất' },
 ]
 
+/** Kho kiểu xem ở trang Tìm kiếm — giữ lựa chọn "Danh sách/Dạng ô" sau khi tải lại. */
+const VIEW_STORAGE_KEY = 'mim:search-publication-view'
+
+/**
+ * Đọc kiểu xem từ localStorage qua useSyncExternalStore: lần render trên server
+ * và lúc hydration luôn là 'grid' (không lệch hydration), rồi tự áp dụng lựa
+ * chọn đã lưu ngay sau khi hydration xong.
+ */
+const viewListeners = new Set<() => void>()
+
+function subscribeView(onStoreChange: () => void): () => void {
+  const handleStorage = (event: StorageEvent) => {
+    // storage chỉ bắn ở tab khác khi giá trị đổi — đồng bộ đa tab miễn phí.
+    if (event.key === VIEW_STORAGE_KEY) onStoreChange()
+  }
+  window.addEventListener('storage', handleStorage)
+  viewListeners.add(onStoreChange)
+  return () => {
+    window.removeEventListener('storage', handleStorage)
+    viewListeners.delete(onStoreChange)
+  }
+}
+
+function getViewSnapshot(): PublicationView | null {
+  const saved = window.localStorage.getItem(VIEW_STORAGE_KEY)
+  return saved === 'grid' || saved === 'list' ? saved : null
+}
+
+function getViewServerSnapshot(): PublicationView | null {
+  // Prerender tĩnh chưa biết lựa chọn của người dùng.
+  return null
+}
+
 export function SearchPage() {
   const searchParams = useSearchParams()
   const [query, setQuery] = useState(searchParams.get('q') ?? '')
   const [domain, setDomain] = useState(searchParams.get('domain') ?? 'all')
   const [kind, setKind] = useState(searchParams.get('kind') ?? 'all')
+  const [honor, setHonor] = useState<string | null>(null)
+  const [advisor, setAdvisor] = useState('all')
+  const [year, setYear] = useState('all')
   const [sort, setSort] = useState('newest')
-  const [view, setView] = useState<PublicationView>('grid')
+  const savedView = useSyncExternalStore(
+    subscribeView,
+    getViewSnapshot,
+    getViewServerSnapshot,
+  )
+  const view = savedView ?? 'grid'
+
+  const handleViewChange = (next: PublicationView) => {
+    window.localStorage.setItem(VIEW_STORAGE_KEY, next)
+    // Cùng tab không bắn sự kiện 'storage' nên tự thông báo để React đọc lại.
+    for (const listener of viewListeners) listener()
+  }
 
   const results = useMemo(() => {
     const keyword = query.trim().toLowerCase()
@@ -85,6 +159,9 @@ export function SearchPage() {
     setQuery('')
     setDomain('all')
     setKind('all')
+    setHonor(null)
+    setAdvisor('all')
+    setYear('all')
     setSort('newest')
   }
 
@@ -128,7 +205,7 @@ export function SearchPage() {
             </Button>
           </div>
 
-          {/* Bản mẫu chỉ chụp được 2 bộ lọc đầu của khối này. */}
+          {/* Các trường mới trong ảnh mẫu — chỉ dựng giao diện, chưa lọc theo dữ liệu thật. */}
           <div className="mt-5 space-y-6">
             <Select
               ariaLabel="Trụ cột nghiên cứu"
@@ -146,12 +223,83 @@ export function SearchPage() {
               onChange={setKind}
               options={kindFilterOptions}
             />
+
+            <fieldset>
+              <legend className="mb-1.5 text-xs font-bold tracking-wide text-slate-600 uppercase">
+                Chỉ số xếp hạng &amp; vinh danh
+              </legend>
+              <div className="grid grid-cols-2 gap-2">
+                {honorFilterOptions.slice(0, 2).map((option) => {
+                  const isActive = honor === option.value
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      aria-pressed={isActive}
+                      onClick={() =>
+                        setHonor((current) =>
+                          current === option.value ? null : option.value,
+                        )
+                      }
+                      className={cn(
+                        'h-10 rounded-lg border px-3 text-sm transition-colors',
+                        isActive
+                          ? 'border-red-300 bg-red-50 font-bold text-red-800'
+                          : 'border-slate-200 bg-slate-50 font-medium text-slate-600 hover:border-slate-300 hover:text-slate-800',
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  )
+                })}
+              </div>
+              {honorFilterOptions.slice(2).map((option) => {
+                const isActive = honor === option.value
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    aria-pressed={isActive}
+                    onClick={() =>
+                      setHonor((current) =>
+                        current === option.value ? null : option.value,
+                      )
+                    }
+                    className={cn(
+                      'mt-2 h-10 w-full rounded-lg border px-3 text-sm transition-colors',
+                      isActive
+                        ? 'border-red-300 bg-red-50 font-bold text-red-800'
+                        : 'border-slate-200 bg-slate-50 font-medium text-slate-600 hover:border-slate-300 hover:text-slate-800',
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                )
+              })}
+            </fieldset>
+
+            <Select
+              ariaLabel="Giảng viên hướng dẫn"
+              label="Giảng viên hướng dẫn"
+              size="lg"
+              value={advisor}
+              onChange={setAdvisor}
+              options={advisorFilterOptions}
+            />
+            <Select
+              ariaLabel="Năm học, năm công bố"
+              label="Năm học / Năm công bố"
+              size="lg"
+              value={year}
+              onChange={setYear}
+              options={yearFilterOptions}
+            />
           </div>
         </Card>
 
         <div className="space-y-5">
-          <Card className="flex flex-col gap-4 p-4 xl:flex-row xl:items-center xl:justify-between">
-            <p className="text-base text-slate-600">
+          <Card className="flex flex-col gap-3 p-4 xl:flex-row xl:items-center xl:justify-between">
+            <p className="text-sm whitespace-nowrap text-slate-600">
               Tìm thấy{' '}
               <span className="font-bold text-brand-dark">
                 {results.length}
@@ -159,17 +307,24 @@ export function SearchPage() {
               công trình học thuật
             </p>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="text-sm text-slate-500">Sắp xếp theo:</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-2 sm:gap-3">
+              <span className="text-sm whitespace-nowrap text-slate-500">
+                Sắp xếp theo:
+              </span>
               <Select
                 ariaLabel="Sắp xếp kết quả"
-                size="lg"
+                size="md"
                 value={sort}
                 onChange={setSort}
                 options={sortOptions}
-                className="w-56"
+                className="w-auto shrink-0"
+                selectClassName="w-36 font-semibold text-brand-dark"
               />
-              <PublicationViewToggle value={view} onChange={setView} />
+              <PublicationViewToggle
+                value={view}
+                onChange={handleViewChange}
+                className="shrink-0"
+              />
             </div>
           </Card>
 

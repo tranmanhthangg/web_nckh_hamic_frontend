@@ -48,6 +48,7 @@ export function PublicationListItem({
       <PublicationCover
         publication={publication}
         hideYear
+        stackPdf
         className="sm:aspect-[4/3] sm:h-auto sm:w-48 sm:shrink-0"
       />
 
@@ -68,7 +69,7 @@ export function PublicationListItem({
           {publication.title}
         </h3>
 
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 truncate text-sm text-slate-500">
           Chuyên ngành:{' '}
           <span className="font-semibold text-slate-700">
             {publication.major}

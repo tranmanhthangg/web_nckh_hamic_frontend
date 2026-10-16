@@ -14,8 +14,10 @@ interface SelectProps {
   /** Nhãn in hoa hiển thị phía trên (dùng cho sidebar bộ lọc). */
   label?: string
   /** Cao của ô chọn: bản mẫu dùng ô lớn ở trang tìm kiếm, ô nhỏ ở sidebar. */
-  size?: 'sm' | 'lg'
+  size?: 'sm' | 'md' | 'lg'
   className?: string
+  /** Class thêm cho thẻ <select> (vd: độ rộng, chữ đậm). */
+  selectClassName?: string
   disabled?: boolean
 }
 
@@ -27,12 +29,13 @@ export function Select({
   label,
   size = 'sm',
   className,
+  selectClassName,
   disabled,
 }: SelectProps) {
   const id = `select-${ariaLabel.replace(/\s+/g, '-').toLowerCase()}`
 
   return (
-    <div className={cn('w-full', className)}>
+    <div className={className ?? 'w-full'}>
       {label ? (
         <label
           htmlFor={id}
@@ -52,8 +55,11 @@ export function Select({
             'w-full appearance-none rounded-lg border border-slate-300 bg-white pr-10 pl-4 shadow-xs transition',
             size === 'lg'
               ? 'h-12 text-base text-slate-800'
-              : 'h-10 text-sm text-slate-700',
+              : size === 'md'
+                ? 'h-10.5 text-sm text-slate-800'
+                : 'h-10 text-sm text-slate-700',
             'focus:border-brand focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-50',
+            selectClassName,
           )}
         >
           {options.map((option) => (
